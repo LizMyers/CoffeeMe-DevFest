@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: 'Expo Firebase Starter',
-    slug: 'expo-firebase',
+    name: 'CoffeeMe-DevFest',
+    slug: 'coffee-me-devfest',
     privacy: 'public',
     platforms: ['ios', 'android'],
     version: '0.15.0',
