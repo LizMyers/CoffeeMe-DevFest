@@ -19,7 +19,8 @@ export default {
     },
     assetBundlePatterns: ['**/*'],
     ios: {
-      supportsTablet: true
+      supportsTablet: true,
+      bundleIdentifier: 'com.sanddollarapps.coffeeme',
     },
     extra: {
       apiKey: process.env.API_KEY,
@@ -27,7 +28,12 @@ export default {
       projectId: process.env.PROJECT_ID,
       storageBucket: process.env.STORAGE_BUCKET,
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
-      appId: process.env.APP_ID
+      appId: process.env.APP_ID,
+      eas: {
+        projectId: "fb5cfb19-f9d4-47b2-b56d-026de4619aa2"
+      },
+    },
+    
     }
   }
-};
+

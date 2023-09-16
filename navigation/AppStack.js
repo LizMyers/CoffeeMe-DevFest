@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { View, StyleSheet, Button, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { HomeScreen } from '../screens';
