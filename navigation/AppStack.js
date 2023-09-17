@@ -9,7 +9,18 @@ const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Home' component={HomeScreen} />
+      <Stack.Screen 
+      name='Coffee Me' 
+      component={HomeScreen}
+      options={{
+        headerStyle: {
+          backgroundColor: '#6B4423',
+      },
+      headerTitleStyle: {
+        color: '#F5E7D9',
+    }}
+  }
+      />
     </Stack.Navigator>
   );
 };
