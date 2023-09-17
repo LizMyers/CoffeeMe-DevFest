@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Button, Text, FlatList, TouchableOpacity, Image, Modal } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Button, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+//firestore
 import { signOut, getAuth } from 'firebase/auth';
+import { query, where, updateDoc, doc, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebase';  // Make sure 'db' is correctly exported from your config
+import { collection, onSnapshot} from 'firebase/firestore';
 
 import imageLookup from '../utils/imageLookup';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
-
-import { db } from '../config/firebase';  // Make sure 'db' is correctly exported from your config
-import { collection, onSnapshot, getDocs } from 'firebase/firestore';
 import { StatusBar } from 'expo-status-bar';
+
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+import { set } from 'lodash';
 
 export const HomeScreen = ({navigation}) => {
   const [coffeeData, setCoffeeData] = useState([]);
@@ -16,7 +22,9 @@ export const HomeScreen = ({navigation}) => {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [scanned, setScanned] = useState(false);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [isCameraMode, setIsCameraMode] = useState(false);
+  const [scanned, setScanned] = useState(false)
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -70,7 +78,8 @@ export const HomeScreen = ({navigation}) => {
             size={32}
             color="#F5E7D9"
             onPress={() => {
-              // Handle your barcode scanning logic here
+              setIsCameraMode(true);
+              setModalVisible(true);
             }}
           />
         </View>
@@ -82,7 +91,9 @@ export const HomeScreen = ({navigation}) => {
             size={32}
             color="#F5E7D9"
             onPress={() => {
-              // Handle your barcode scanning logic here
+              setIsCameraMode(false);
+              setModalVisible(true);
+              setScanned(false);
             }}
           />
         </View>
@@ -91,9 +102,11 @@ export const HomeScreen = ({navigation}) => {
     });
   }, [navigation]);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    setModalVisible(false);
+    await updateCoffeeCount(data);  
+    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {
@@ -103,6 +116,62 @@ export const HomeScreen = ({navigation}) => {
     return <Text>No access to camera</Text>;
   }
 
+  const updateCoffeeCount = async (barcode) => {
+    const coffeeCollection = collection(db, 'original');
+    const q = query(coffeeCollection, where("barcode", "==", barcode));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const docData = querySnapshot.docs[0];
+      const currentCount = docData.data().count;
+      const updatedCount = currentCount + 10;
+      const coffeeName = docData.data().name;
+
+      Alert.alert(
+        "Add Capsules",
+        `Adding 10 capsules for ${coffeeName}.`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: async () => {
+              await updateDoc(doc(db, 'original', docData.id), {
+                count: updatedCount
+              });
+              //alert('Coffee count updated!');
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    } else {
+      alert('Coffee with this barcode does not exist.');
+    }
+  };
+
+  const takePicture = async () => {
+    if (cameraRef) {
+      const photo = await cameraRef.takePictureAsync();
+      //console.log('Photo:', photo);
+  
+      // Request permissions to save to media library
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === 'granted') {
+        // Save the photo to the album
+        const asset = await MediaLibrary.createAssetAsync(photo.uri);
+        //console.log('Asset:', asset);
+        setModalVisible(false);
+        setIsCameraMode(false);
+        alert('Photo saved to general album!');
+      }
+    }
+  };
+  
+
+  //setup item for flatlist
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemContainer}>
@@ -122,7 +191,7 @@ export const HomeScreen = ({navigation}) => {
       <StatusBar style="light" />
 
         <View style={styles.toolbar}>
-          <Text style={styles.toolbarTitle}>Hi Liz</Text>
+          <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
             <TouchableOpacity onPress={handleLogout}>
               <MaterialIcons name="logout" size={32} color="#000" style={{paddingRight: 10}} />
             </TouchableOpacity>
@@ -140,11 +209,26 @@ export const HomeScreen = ({navigation}) => {
           visible={modalVisible}
         >
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <BarCodeScanner
-              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={{ height: 400, width: 400 }}
-            />
-            <Button title="Close Scanner" onPress={() => setModalVisible(false)} />
+            {isCameraMode ? (
+                <Camera 
+                  style={{ width: 400, height: 400 }} 
+                  ref={ref => {
+                    setCameraRef(ref);
+                  }}
+                >
+                  <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Button title="Take Picture" onPress={takePicture} />
+                  </View>
+                </Camera>
+            ) : (
+                <BarCodeScanner
+                  onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                  style={{ height: 400, width: 400 }}
+                />
+            )}
+
+            {isCameraMode && <Button title="Close Camera" onPress={() => setModalVisible(false)} />}
+            {!isCameraMode && <Button title="Close Scanner" onPress={() => setModalVisible(false)} />}
           </View>
         </Modal>
 
@@ -164,7 +248,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'left',
     marginLeft: 20,
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     flex: 1,
     fontSize: 20,
   },
