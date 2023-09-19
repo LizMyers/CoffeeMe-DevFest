@@ -1,21 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
 import { Button } from '../components';
+
 //firestore
 import { signOut, getAuth } from 'firebase/auth';
 import { query, where, updateDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';  // Make sure 'db' is correctly exported from your config
 import { collection, onSnapshot} from 'firebase/firestore';
+
+//UI eleements
 import { Colors } from '../config';
 import imageLookup from '../utils/imageLookup';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
+//camera
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import * as FileSystem from 'expo-file-system';
+
+//toast
+import Toast from 'react-native-root-toast';
+
+//lottie
 import LottieView from 'lottie-react-native';
+
 
 
 export const HomeScreen = ({navigation}) => {
@@ -25,22 +34,11 @@ export const HomeScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
   const [isCameraMode, setIsCameraMode] = useState(false);
-  const [scanned, setScanned] = useState(false)
+  const [scanned, setScanned] = useState(false);
 
+ //get coffee data
   useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    };
 
-    getBarCodeScannerPermissions();
-  }, []);
-
-  const handleLogout = () => {
-    signOut(auth).catch(error => console.log('Error logging out: ', error));
-  };
-
-  useEffect(() => {
     let unsubscribe;
   
     try {
@@ -48,9 +46,18 @@ export const HomeScreen = ({navigation}) => {
   
       unsubscribe = onSnapshot(coffeeCollection,
         (snapshot) => {
-          //console.log('Received snapshot: ', snapshot);
           const allData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           const inStockCoffee = allData.filter(item => item.count >= 1);
+  
+          allData.forEach(coffee => {
+            if (coffee.count <= 5) {
+              Toast.show(`${coffee.name} - only ${coffee.count} left.`, {
+                position: Toast.positions.CENTER, // This puts the toast in the middle
+                duration: 5000 // This sets the duration to 5 seconds
+              });
+            }
+          });
+  
           setCoffeeData(inStockCoffee);
         },
         (error) => {
@@ -68,7 +75,19 @@ export const HomeScreen = ({navigation}) => {
       }
     };
   }, []);
-  
+  //Get camera permissions
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
+    getBarCodeScannerPermissions();
+  }, []);
+
+  const handleLogout = () => {
+    signOut(auth).catch(error => console.log('Error logging out: ', error));
+  };
+
   //handle barcode scanning
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -195,6 +214,7 @@ export const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
+
         <View style={styles.toolbar}>
           <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
             <TouchableOpacity onPress={handleLogout}>
@@ -252,11 +272,8 @@ export const HomeScreen = ({navigation}) => {
                </BarCodeScanner>
             )}
 
-            
-            
           </View>
         </Modal>
-
     </View>
   );
 };
@@ -360,5 +377,6 @@ const styles = StyleSheet.create({
   loadingIndicator: {
     width: 150,
     height: 150,
-  }
+  },
+
 });

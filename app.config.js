@@ -32,6 +32,10 @@ export default {
       eas: {
         projectId: "fb5cfb19-f9d4-47b2-b56d-026de4619aa2"
       },
+      expo: {
+        expoProjectId: "fb5cfb19-f9d4-47b2-b56d-026de4619aa2"
+      }
+      
     },
     
     }
