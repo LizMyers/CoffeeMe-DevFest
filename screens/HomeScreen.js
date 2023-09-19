@@ -237,7 +237,7 @@ export const HomeScreen = ({navigation}) => {
                 </Camera>
 
                 <View style={{width: 150, height: 150, alignSelf: 'center'}}>
-                  <LottieView style={{width: 150, height: 150}} source={require('../assets/coffee_anim.json')} autoPlay loop />
+                  <LottieView style={{width: 150, height: 150}} source={require('../assets/loading.json')} autoPlay loop />
                </View>
   
                 <Button style={styles.button} onPress={takePicture}>
