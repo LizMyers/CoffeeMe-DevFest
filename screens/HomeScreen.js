@@ -15,6 +15,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
+import LottieView from 'lottie-react-native';
 
 
 export const HomeScreen = ({navigation}) => {
@@ -226,27 +227,33 @@ export const HomeScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
             {isCameraMode ? (
+              <>
                 <Camera 
-                  style={{ width: 400, height: 400 }} 
+                  style={{height: 300, width: '100%', alignSelf: 'center'}} 
                   ref={ref => {
                     setCameraRef(ref);
                   }}
                 >
-                  <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <Button title="Take Picture" onPress={takePicture} />
-                  </View>
                 </Camera>
+
+                <View style={{width: 150, height: 150, alignSelf: 'center'}}>
+                  <LottieView style={{width: 150, height: 150}} source={require('../assets/coffee_anim.json')} autoPlay loop />
+               </View>
+  
+                <Button style={styles.button} onPress={takePicture}>
+                  <Text style={styles.buttonText}>Take Picture</Text>
+                </Button>
+              </>
             ) : (
                 <BarCodeScanner
+                  style={{height: 300, width: '100%', alignSelf: 'center'}} 
                   onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                  style={{ height: 400, width: 400 }}
                 >
-                  <View style={styles.overlay} />
                </BarCodeScanner>
             )}
 
-            {isCameraMode && <Button title="Close Camera" onPress={() => setModalVisible(false)} />}
-            {!isCameraMode && <Button title="Close Scanner" onPress={() => setModalVisible(false)} />}
+            
+            
           </View>
         </Modal>
 
@@ -336,14 +343,22 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
   button: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 50,
-    marginTop: 8,
+    width: '90%',
+    marginTop: 20,
+    alignSelf: 'center',
     backgroundColor: Colors.caramel,
     color: Colors.white,
-    padding: 10,
+    padding: 15,
     borderRadius: 8
     },
-  
+  buttonText: {
+    fontSize: 20,
+    color: Colors.white,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  loadingIndicator: {
+    width: 150,
+    height: 150,
+  }
 });
