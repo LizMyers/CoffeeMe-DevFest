@@ -4,8 +4,8 @@ import { Formik } from 'formik';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 import { passwordResetSchema } from '../utils';
-import { Colors, auth } from '../config';
-import { View, TextInput, Button, FormErrorMessage } from '../components';
+import { Images, Colors, auth } from '../config';
+import { View, TextInput, Button, FormErrorMessage, Logo } from '../components';
 
 export const ForgotPasswordScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState('');
@@ -78,24 +78,31 @@ export const ForgotPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.cream,
     paddingHorizontal: 12
   },
   innercontainer: {
-    alignItems: 'center'
+    alignItems: 'flex-end',
+    marginTop: 50,
+  },
+  logoContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   screenTitle: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: '700',
-    color: Colors.black,
-    paddingTop: 20
+    color: Colors.coffee,
+    paddingTop: 40,
+    textAlign: 'center'
   },
   button: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.caramel,
     padding: 10,
     borderRadius: 8
   },

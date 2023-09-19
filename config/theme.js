@@ -4,5 +4,8 @@ export const Colors = {
   black: '#222222',
   white: '#ffffff',
   mediumGray: '#6e6869',
-  red: '#fc5c65'
+  red: '#fc5c65',
+  caramel: '#9b652F',
+  coffee: '#4f2200',
+  cream: '#ffe4c6',
 };

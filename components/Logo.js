@@ -7,20 +7,20 @@ import { View } from './View';
 
 export const Logo = ({ uri }) => {
   // uncomment to restore firebase flame logo
-  // return <Image source={uri} style={styles.image} />;
+   return <Image source={uri} style={styles.image} />;
 
 // animated coffee cup
-return  (
-  <View style={styles.container}>
-    <LottieView style={styles.coffeeLogo} source={require('../assets/coffee_anim.json')} autoPlay loop  />
-  </View>
-  )
+// return  (
+//   <View style={styles.container}>
+//     <LottieView style={styles.coffeeLogo} source={require('../assets/coffee_anim.json')} autoPlay loop  />
+//   </View>
+//   )
 };
 
 const styles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200
+    width: 250,
+    height: 390
   },
   container: {
     flex: 1,
@@ -31,7 +31,5 @@ const styles = StyleSheet.create({
   coffeeLogo: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 200,
-    height: 200
   }
 });

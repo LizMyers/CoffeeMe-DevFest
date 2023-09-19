@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Button, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+import { Button } from '../components';
 //firestore
 import { signOut, getAuth } from 'firebase/auth';
 import { query, where, updateDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';  // Make sure 'db' is correctly exported from your config
 import { collection, onSnapshot} from 'firebase/firestore';
-
+import { Colors } from '../config';
 import imageLookup from '../utils/imageLookup';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
@@ -14,12 +15,11 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
-import { set } from 'lodash';
+
 
 export const HomeScreen = ({navigation}) => {
   const [coffeeData, setCoffeeData] = useState([]);
-  const auth = getAuth();  // Initialize auth
-
+  const auth = getAuth();  
   const [hasPermission, setHasPermission] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
@@ -169,7 +169,6 @@ export const HomeScreen = ({navigation}) => {
       }
     }
   };
-  
 
   //setup item for flatlist
   const renderItem = ({ item }) => {
@@ -177,10 +176,16 @@ export const HomeScreen = ({navigation}) => {
       <View style={styles.itemContainer}>
         <Image 
         source={imageLookup[item.id]} 
-        style={{ height: 50, width: 50, borderWidth: 0, borderColor: '#000' }} 
+        style={{ height: 50, width: 50}} 
         />
-
-        <Text style={styles.name}>{item.name}</Text>
+          <View style={styles.nameGroup}>
+            {item.name === 'Pumpkin Spice Cake' || item.name === 'Cioccolatino' ? 
+             <Text style={[styles.name, {marginTop: 20, fontWeight: 'normal'}]}>{item.name}</Text>
+             :
+             <Text style={styles.name}>{item.name}</Text> 
+             }
+            <Image source={imageLookup[item.strength]} style={styles.strength} />
+          </View>
         <Text style={styles.count}>{item.count}</Text>
       </View>
     );
@@ -189,7 +194,6 @@ export const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-
         <View style={styles.toolbar}>
           <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
             <TouchableOpacity onPress={handleLogout}>
@@ -201,6 +205,7 @@ export const HomeScreen = ({navigation}) => {
             data={coffeeData}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => <View style={{ height: .3, backgroundColor: Colors.white }} />}
         />
 
         <Modal
@@ -208,7 +213,18 @@ export const HomeScreen = ({navigation}) => {
           transparent={false}
           visible={modalVisible}
         >
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.modal}>
+            <View style={styles.modalHeader}>
+              {
+              isCameraMode ? 
+              <Text style={styles.modalHeaderTitle}>Image Classification</Text>
+              : 
+              <Text style={styles.modalHeaderTitle}>Barcode Scanner</Text>
+              }
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons name="close" size={32} color="#F5E7D9" style={{paddingRight: 10}} />
+            </TouchableOpacity>
+          </View>
             {isCameraMode ? (
                 <Camera 
                   style={{ width: 400, height: 400 }} 
@@ -224,14 +240,15 @@ export const HomeScreen = ({navigation}) => {
                 <BarCodeScanner
                   onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                   style={{ height: 400, width: 400 }}
-                />
+                >
+                  <View style={styles.overlay} />
+               </BarCodeScanner>
             )}
 
             {isCameraMode && <Button title="Close Camera" onPress={() => setModalVisible(false)} />}
             {!isCameraMode && <Button title="Close Scanner" onPress={() => setModalVisible(false)} />}
           </View>
         </Modal>
-
 
     </View>
   );
@@ -240,15 +257,17 @@ export const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: '#F5E7D9',
-    paddingTop: 20,
-    paddingBottom: 10,
+    paddingVertical: 10,
     flexDirection: 'row',
+    paddingLeft: 10,
+    paddingRight: 7,
+    maxHeight: 60,
   },
   toolbarTitle: {
-    color: '#000',
+    color: '#4f2200',
     textAlign: 'left',
-    marginLeft: 20,
-    fontWeight: 'normal',
+    marginHorizontal: 10,
+    lineHeight: 30,
     flex: 1,
     fontSize: 20,
   },
@@ -257,8 +276,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomWidth: .25,
+    borderStyle: 'solid',
+    borderBottomColor: Colors.caramel,
+    marginLeft: 4,
   },
   thumbnail: {
     width: 50,
@@ -269,14 +290,60 @@ const styles = StyleSheet.create({
     flex: 1, 
     marginLeft: 10,
     fontSize: 20,
-    color: '#121212',
+    color: '#4f2200'
   },
   count: {
     width: 50,
     textAlign: 'right',
     fontSize: 20,
     fontWeight: 'normal',
-    color: '#121212',
-    marginRight: 8,
+    color: '#4f2200',
+    marginRight: 15,
   },
+  nameGroup:{
+    flexDirection: 'row',
+    alignItems: 'left',
+    maxWidth: 260,
+    marginTop: -20,
+  },
+  strength: {
+    width: 170,
+    maxHeight: 10,
+    opacity: .4,
+    position: 'absolute',
+    top: 30,
+    left: 10,
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: Colors.cream,
+  },
+  modalHeader: {
+    backgroundColor: '#4f2200',
+    paddingTop: 20,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    width: '100%',  
+    height: 120,
+  },
+  modalHeaderTitle: {
+    color: '#F5E7D9',
+    marginLeft: 20,
+    fontSize: 20,
+    borderWidth: 0,
+    borderColor: '#fff',
+  },
+  button: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 50,
+    marginTop: 8,
+    backgroundColor: Colors.caramel,
+    color: Colors.white,
+    padding: 10,
+    borderRadius: 8
+    },
+  
 });

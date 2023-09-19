@@ -8,6 +8,7 @@ import { View, TextInput, Logo, Button, FormErrorMessage } from '../components';
 import { Images, Colors, auth } from '../config';
 import { useTogglePasswordVisibility } from '../hooks';
 import { loginValidationSchema } from '../utils';
+import { StatusBar } from 'expo-status-bar';
 
 export const LoginScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState('');
@@ -23,11 +24,12 @@ export const LoginScreen = ({ navigation }) => {
   return (
     <>
       <View isSafe style={styles.container}>
+        <StatusBar style="dark" />
         <KeyboardAwareScrollView enableOnAndroid={true}>
-          {/* LogoContainer: consits app logo and screen title */}
-          <View style={styles.logoContainer}>
+          {/* LogoContainer: consists app logo and screen title */}
+          <View style={[styles.logoContainer, {height: 400, borderWidth: 0, borderColor: Colors.coffee}]}>
             <Logo uri={Images.logo} />
-            <Text style={styles.screenTitle}>Welcome back!</Text>
+            {/* <Text style={styles.screenTitle}>Welcome back!</Text> */}
           </View>
           <Formik
             initialValues={{
@@ -109,11 +111,7 @@ export const LoginScreen = ({ navigation }) => {
       </View>
 
       {/* App info footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Expo Firebase Starter App (based on managed workflow)
-        </Text>
-      </View>
+    
     </>
   );
 };
@@ -121,11 +119,12 @@ export const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.cream,
     paddingHorizontal: 12
   },
   logoContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 320,
   },
   screenTitle: {
     fontSize: 32,
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   footer: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.cream,
     paddingHorizontal: 12,
     paddingBottom: 48,
     alignItems: 'center'
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.caramel,
     padding: 10,
     borderRadius: 8
   },

@@ -35,7 +35,7 @@ export const SignupScreen = ({ navigation }) => {
         {/* LogoContainer: consits app logo and screen title */}
         <View style={styles.logoContainer}>
           <Logo uri={Images.logo} />
-          <Text style={styles.screenTitle}>Create a new account!</Text>
+          {/* <Text style={styles.screenTitle}>Create a new account!</Text> */}
         </View>
         {/* Formik Wrapper */}
         <Formik
@@ -132,7 +132,7 @@ export const SignupScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.cream,
     paddingHorizontal: 12
   },
   logoContainer: {
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.orange,
+    backgroundColor: Colors.caramel,
     padding: 10,
     borderRadius: 8
   },
