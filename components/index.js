@@ -5,7 +5,7 @@ import { Icon } from './Icon';
 import { Button } from './Button';
 import { FormErrorMessage } from './FormErrorMessage';
 import { LoadingIndicator } from './LoadingIndicator';
-import { Inventory } from './Inventory';
+import { Inventory } from './inventory/Inventory';
 
 export {
   View,

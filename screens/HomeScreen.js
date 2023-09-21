@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
 import { Button } from '../components';
 
+//components
+import { Inventory }  from '../components/inventory/Inventory';
+
 //firestore
 import { signOut, getAuth } from 'firebase/auth';
 import { query, where, updateDoc, doc, getDocs } from 'firebase/firestore';
@@ -75,6 +78,7 @@ export const HomeScreen = ({navigation}) => {
       }
     };
   }, []);
+
   //Get camera permissions
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -190,7 +194,7 @@ export const HomeScreen = ({navigation}) => {
     }
   };
 
-  //setup item for flatlist
+  // //setup item for flatlist
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemContainer}>
@@ -222,12 +226,7 @@ export const HomeScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
 
-        <FlatList
-            data={coffeeData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            ItemSeparatorComponent={() => <View style={{ height: .3, backgroundColor: Colors.white }} />}
-        />
+        <Inventory data={coffeeData} imageLookup={imageLookup} />
 
         <Modal
           animationType="slide"
@@ -294,49 +293,6 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     flex: 1,
     fontSize: 20,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: .25,
-    borderStyle: 'solid',
-    borderBottomColor: Colors.caramel,
-    marginLeft: 4,
-  },
-  thumbnail: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  name: {
-    flex: 1, 
-    marginLeft: 10,
-    fontSize: 20,
-    color: '#4f2200'
-  },
-  count: {
-    width: 50,
-    textAlign: 'right',
-    fontSize: 20,
-    fontWeight: 'normal',
-    color: '#4f2200',
-    marginRight: 15,
-  },
-  nameGroup:{
-    flexDirection: 'row',
-    alignItems: 'left',
-    maxWidth: 260,
-    marginTop: -20,
-  },
-  strength: {
-    width: 170,
-    maxHeight: 10,
-    opacity: .4,
-    position: 'absolute',
-    top: 30,
-    left: 10,
   },
   modal: {
     flex: 1,
