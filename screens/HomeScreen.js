@@ -49,10 +49,10 @@ export const HomeScreen = ({navigation}) => {
   
       unsubscribe = onSnapshot(coffeeCollection,
         (snapshot) => {
-          const allData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          const inStockCoffee = allData.filter(item => item.count >= 1);
+          const coffeeData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const inStockCoffee = coffeeData.filter(item => item.count >= 1);
   
-          allData.forEach(coffee => {
+          coffeeData.forEach(coffee => {
             if (coffee.count <= 5) {
               Toast.show(`${coffee.name} - only ${coffee.count} left.`, {
                 position: Toast.positions.CENTER, // This puts the toast in the middle
@@ -221,6 +221,7 @@ export const HomeScreen = ({navigation}) => {
                 setModalVisible={setModalVisible} 
                 cameraRef={cameraRef}
                 takePicture={takePicture}
+                coffeeData={coffeeData}
               />
             ) : (
               <BarcodeModal 

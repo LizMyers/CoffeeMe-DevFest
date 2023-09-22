@@ -1,6 +1,6 @@
 // InferenceModal.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Button } from '../../components';
 import ModalHeader from './ModalHeader';
 import { Camera } from 'expo-camera';
@@ -8,13 +8,50 @@ import LottieView from 'lottie-react-native';
 import { Colors } from '../../config';
 
 import axios from 'axios';
+import { db } from '../../config/firebase';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { set } from 'lodash';
 
-export const InferenceModal = ({ setModalVisible, cameraRef, takePicture }) => {
+
+export const InferenceModal = ({ setModalVisible, cameraRef, coffeeData, takePicture }) => {
   
   const [containerWidth, setContainerWidth] = useState(0);
   const [prediction, setPrediction] = useState(null);
+  const [displayText, setDisplayText] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  // Function to map class name to the actual name in Firebase
+  const getActualName = (className, coffeeData) => {
+    const actualName = coffeeData[className]?.name || className;
+    return actualName;
+  };
+
+  // Converting coffeeData array to an object
+const convertCoffeeArrayToObject = (coffeeDataArray) => {
+  const coffeeObject = {};
+  coffeeDataArray.forEach((coffee) => {
+    coffeeObject[coffee.id] = coffee;
+  });
+  return coffeeObject;
+};
+
+const processPredictions = (predictions, coffeeDataArray) => {
+  if (!predictions || predictions.length === 0) return;
+
+  const coffeeData = convertCoffeeArrayToObject(coffeeDataArray);
+
+  const topPrediction = predictions[0];
+  const actualName = getActualName(topPrediction.class, coffeeData);
+
+  // Triggering the subtract function
+  subtractOneFromInventory(topPrediction.class, coffeeData);
+};
+
 
   const getInference = async (base64Image) => {
+    setLoading(true);
+
     try {
       const response = await axios({
         method: 'POST',
@@ -28,8 +65,36 @@ export const InferenceModal = ({ setModalVisible, cameraRef, takePicture }) => {
         },
       });
       setPrediction(response.data);
+      console.log('PREDICTION:', response.data);
+      const predictionsArray = response.data.predictions;
+
+      // Process your predictions
+      //processPredictions(predictionsArray);
+
+      if (coffeeData) {  // Check if coffeeData exists
+        // Process your predictions
+        processPredictions(predictionsArray, coffeeData);  // Pass coffeeData
+      } else {
+        console.log('coffeeData is undefined.');
+      }
+
+      let tempDisplayText = '';
+
+      predictionsArray.forEach((prediction) => {
+        const confidence = Math.round(prediction.confidence * 100);
+        const className = getActualName(prediction.class, coffeeData);
+        tempDisplayText += `${confidence}% | ${className}, `;
+      });
+
+      // Remove the trailing comma and space
+      tempDisplayText = tempDisplayText.slice(0, -2);
+
+      // Update the state
+      setDisplayText(tempDisplayText);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,6 +106,44 @@ export const InferenceModal = ({ setModalVisible, cameraRef, takePicture }) => {
       // console.log('Photo:', photo);
       getInference(photo.base64);
     }
+  };
+
+  const subtractOneFromInventory = async (classId, coffeeData) => {
+    const actualName = getActualName(classId, coffeeData);
+  
+    Alert.alert(
+      'Inventory Update',
+      `Subtract 1 from ${actualName}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'OK',
+          onPress: async () => {
+            console.log('Debug - classId:', classId);
+            console.log('Debug - coffeeData:', JSON.stringify(coffeeData));
+            
+            const foundCoffee = coffeeData[classId];
+            if (foundCoffee) {
+              console.log('Debug - foundCoffee:', foundCoffee);
+              console.log('Debug - foundCoffee.count:', foundCoffee.count);
+              const newCount = foundCoffee.count - 1;
+              console.log('Debug - newCount:', newCount);
+  
+              // Import and usage changed here:
+              const docRef = doc(db, 'original', classId);
+              await setDoc(docRef, { count: newCount }, { merge: true });
+
+              
+              //alert('Inventory updated!');
+              setModalVisible(false);
+            } else {
+              alert('Coffee type not found!');
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -63,25 +166,39 @@ export const InferenceModal = ({ setModalVisible, cameraRef, takePicture }) => {
       }}
     >
       <View style={{ position: 'absolute', top: 0, width: '100%', padding: 16 }}>
-        <LottieView source={require('../../assets/loading.json')} autoPlay loop 
+        {loading && <LottieView source={require('../../assets/loading.json')} autoPlay loop 
           style={{
             position: 'absolute',
-            top: 30, // adjust this as needed
-            left: 100, // adjust this as needed
+            top: 30, 
+            left: 100, 
             transform: [
-              {translateX: -75}, // half of your LottieView's width
-              {translateY: -75}  // half of your LottieView's height
+              {translateX: -75}, 
+              {translateY: -75}  
             ],
-            width: 150,  // adjust this as needed
-            height: 150, // adjust this as needed
+            width: 150,  
+            height: 150, 
           }}
-        />
+        />}
         </View>
 
         <View style={{ flex: 1, marginTop: 100,  width: '100%', padding: 16 }}>
+        { displayText ? 
+          <View style={styles.predictionView}>
+            <Text style={styles.predictionText}>
+              {displayText}
+            </Text>
+          </View>
+          :
+          <View style={styles.predictionView}>
+            <Text style={styles.predictionText}>
+              No prediction yet...
+            </Text>
+          </View>
+        }      
+    
+
           <Button title="Take Picture" onPress={modifiedTakePicture} style={styles.button}>
             <Text style={styles.buttonText}>Take Picture</Text>
-            {prediction && <Text>{JSON.stringify(prediction)}</Text>}
           </Button>
         </View>
         
@@ -114,5 +231,24 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  predictionView: {
+     width: '100%', 
+     height: 200, 
+     alignItems: 'center', 
+     justifyContent: 'center',
+     borderWidth: 0,
+     borderColor: Colors.coffee,
+  },
+  predictionText: {
+    display: 'block',
+    width: '100%',
+    textAlign: 'center',
+    lineHeight: 40,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#000000',
+    borderColor: Colors.coffee,
+    borderWidth: 0,
   }
 });
