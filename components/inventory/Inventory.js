@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlatList, View, Text, Image, StyleSheet } from 'react-native';
-import { Colors } from '../../config'; // Import your color constants, adjust the path if necessary
-
+import { Colors } from '../../config'; 
 
 export const Inventory = ({ data, imageLookup }) => {
   const renderItem = ({ item }) => {

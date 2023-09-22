@@ -13,6 +13,7 @@
     "@react-native-masked-view/masked-view": "0.2.9",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/stack": "^6.2.2",
+    "axios": "^1.5.0",
     "dotenv": "^10.0.0",
     "expo": "^49.0.11",
     "expo-barcode-scanner": "~12.5.3",

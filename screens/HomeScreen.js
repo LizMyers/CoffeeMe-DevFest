@@ -1,9 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image, Modal, Alert } from 'react-native';
-import { Button } from '../components';
+import React, { useState, useEffect, useRef} from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, Modal, Alert } from 'react-native';
 
-//components
+//inventory components
 import { Inventory }  from '../components/inventory/Inventory';
+import { BarcodeModal } from '../components/modals/BarcodeModal';
+import { InferenceModal } from '../components/modals/InferenceModal';
+
+//need for hasPermission on line 31
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as MediaLibrary from 'expo-media-library';
+
 
 //firestore
 import { signOut, getAuth } from 'firebase/auth';
@@ -17,27 +23,21 @@ import imageLookup from '../utils/imageLookup';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
-//camera
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Camera } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-
 //toast
 import Toast from 'react-native-root-toast';
 
-//lottie
-import LottieView from 'lottie-react-native';
-
-
 
 export const HomeScreen = ({navigation}) => {
-  const [coffeeData, setCoffeeData] = useState([]);
   const auth = getAuth();  
+  const [coffeeData, setCoffeeData] = useState([]);
   const [hasPermission, setHasPermission] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [cameraRef, setCameraRef] = useState(null);
+
   const [isCameraMode, setIsCameraMode] = useState(false);
   const [scanned, setScanned] = useState(false);
+
+  //const cameraRef = useRef(null);
+  const [cameraRef, setCameraRef] = useState(null);
 
  //get coffee data
   useEffect(() => {
@@ -127,6 +127,8 @@ export const HomeScreen = ({navigation}) => {
   }, [navigation]);
 
   const handleBarCodeScanned = async ({ type, data }) => {
+    console.log('Scanning barcode...');
+    console.log('Camera Ref:', cameraRef);
     setScanned(true);
     setModalVisible(false);
     await updateCoffeeCount(data);  
@@ -177,8 +179,9 @@ export const HomeScreen = ({navigation}) => {
   };
 
   const takePicture = async () => {
-    if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
+  
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync();
       //console.log('Photo:', photo);
   
       // Request permissions to save to media library
@@ -192,27 +195,6 @@ export const HomeScreen = ({navigation}) => {
         alert('Photo saved to general album!');
       }
     }
-  };
-
-  // //setup item for flatlist
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.itemContainer}>
-        <Image 
-        source={imageLookup[item.id]} 
-        style={{ height: 50, width: 50}} 
-        />
-          <View style={styles.nameGroup}>
-            {item.name === 'Pumpkin Spice Cake' || item.name === 'Cioccolatino' ? 
-             <Text style={[styles.name, {marginTop: 20, fontWeight: 'normal'}]}>{item.name}</Text>
-             :
-             <Text style={styles.name}>{item.name}</Text> 
-             }
-            <Image source={imageLookup[item.strength]} style={styles.strength} />
-          </View>
-        <Text style={styles.count}>{item.count}</Text>
-      </View>
-    );
   };
 
   return (
@@ -234,43 +216,18 @@ export const HomeScreen = ({navigation}) => {
           visible={modalVisible}
         >
           <View style={styles.modal}>
-            <View style={styles.modalHeader}>
-              {
-              isCameraMode ? 
-              <Text style={styles.modalHeaderTitle}>Image Classification</Text>
-              : 
-              <Text style={styles.modalHeaderTitle}>Barcode Scanner</Text>
-              }
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Ionicons name="close" size={32} color="#F5E7D9" style={{paddingRight: 10}} />
-            </TouchableOpacity>
-          </View>
             {isCameraMode ? (
-              <>
-                <Camera 
-                  style={{height: 300, width: '100%', alignSelf: 'center'}} 
-                  ref={ref => {
-                    setCameraRef(ref);
-                  }}
-                >
-                </Camera>
-
-                <View style={{width: 150, height: 150, alignSelf: 'center'}}>
-                  <LottieView style={{width: 150, height: 150}} source={require('../assets/loading.json')} autoPlay loop />
-               </View>
-  
-                <Button style={styles.button} onPress={takePicture}>
-                  <Text style={styles.buttonText}>Take Picture</Text>
-                </Button>
-              </>
+              <InferenceModal 
+                setModalVisible={setModalVisible} 
+                cameraRef={cameraRef}
+                takePicture={takePicture}
+              />
             ) : (
-                <BarCodeScanner
-                  style={{height: 300, width: '100%', alignSelf: 'center'}} 
-                  onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                >
-               </BarCodeScanner>
+              <BarcodeModal 
+                setModalVisible={setModalVisible}
+                handleBarCodeScanned={handleBarCodeScanned}
+              />
             )}
-
           </View>
         </Modal>
     </View>
@@ -294,45 +251,30 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
   },
-  modal: {
-    flex: 1,
-    backgroundColor: Colors.cream,
-  },
-  modalHeader: {
-    backgroundColor: '#4f2200',
-    paddingTop: 20,
-    paddingBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    width: '100%',  
-    height: 120,
-  },
-  modalHeaderTitle: {
-    color: '#F5E7D9',
-    marginLeft: 20,
-    fontSize: 20,
-    borderWidth: 0,
-    borderColor: '#fff',
-  },
-  button: {
-    width: '90%',
-    marginTop: 20,
-    alignSelf: 'center',
-    backgroundColor: Colors.caramel,
-    color: Colors.white,
-    padding: 15,
-    borderRadius: 8
+    modal: {
+      flex: 1,
+      paddingTop: 50,
+      backgroundColor: Colors.coffee,
     },
-  buttonText: {
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  loadingIndicator: {
-    width: 150,
-    height: 150,
-  },
+    button: {
+      width: '90%',
+      marginTop: 20,
+      alignSelf: 'center',
+      backgroundColor: Colors.caramel,
+      color: Colors.white,
+      padding: 15,
+      borderRadius: 8
+    },
+    buttonText: {
+      fontSize: 20,
+      color: Colors.white,
+      fontWeight: '700',
+      textAlign: 'center',
+    },
+    loadingIndicator: {
+      width: 150,
+      height: 150,
+    },
+
 
 });
