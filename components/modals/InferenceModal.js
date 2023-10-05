@@ -9,8 +9,7 @@ import { Colors } from '../../config';
 
 import axios from 'axios';
 import { db } from '../../config/firebase';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
-import { set } from 'lodash';
+import { doc, setDoc } from 'firebase/firestore';
 
 
 export const InferenceModal = ({ setModalVisible, cameraRef, coffeeData, takePicture }) => {
@@ -166,7 +165,8 @@ const processPredictions = (predictions, coffeeDataArray) => {
       }}
     >
       <View style={{ position: 'absolute', top: 0, width: '100%', padding: 16 }}>
-        {loading && <LottieView source={require('../../assets/loading.json')} autoPlay loop 
+        {/* ../../assets/loading.json == Googley dots dancing */}
+        {loading && <LottieView source={require('../../assets/coffee_anim.json')} autoPlay loop 
           style={{
             position: 'absolute',
             top: 30, 

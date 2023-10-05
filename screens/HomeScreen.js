@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, Alert } from 'react-native';
 
 //inventory components
@@ -9,7 +9,6 @@ import { InferenceModal } from '../components/modals/InferenceModal';
 //need for hasPermission on line 31
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as MediaLibrary from 'expo-media-library';
-
 
 //firestore
 import { signOut, getAuth } from 'firebase/auth';
@@ -22,9 +21,6 @@ import { Colors } from '../config';
 import imageLookup from '../utils/imageLookup';
 import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-
-//toast
-import Toast from 'react-native-root-toast';
 
 
 export const HomeScreen = ({navigation}) => {
@@ -51,15 +47,6 @@ export const HomeScreen = ({navigation}) => {
         (snapshot) => {
           const coffeeData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           const inStockCoffee = coffeeData.filter(item => item.count >= 1);
-  
-          coffeeData.forEach(coffee => {
-            if (coffee.count <= 5) {
-              Toast.show(`${coffee.name} - only ${coffee.count} left.`, {
-                position: Toast.positions.CENTER, // This puts the toast in the middle
-                duration: 5000 // This sets the duration to 5 seconds
-              });
-            }
-          });
   
           setCoffeeData(inStockCoffee);
         },
@@ -92,8 +79,7 @@ export const HomeScreen = ({navigation}) => {
     signOut(auth).catch(error => console.log('Error logging out: ', error));
   };
 
-  //handle barcode scanning
-  React.useLayoutEffect(() => {
+  React.useLayoutEffect(() => {   //coffee icon left of Title
     navigation.setOptions({
       headerLeft: () => (
         <View style={{ marginLeft: 20 }}>
@@ -108,7 +94,7 @@ export const HomeScreen = ({navigation}) => {
           />
         </View>
       ),
-      headerRight: () => (
+      headerRight: () => ( //barcode icon right of Title
         <View style={{ marginRight: 20 }}>
           <Ionicons
             name="barcode-sharp"
@@ -127,8 +113,8 @@ export const HomeScreen = ({navigation}) => {
   }, [navigation]);
 
   const handleBarCodeScanned = async ({ type, data }) => {
-    console.log('Scanning barcode...');
-    console.log('Camera Ref:', cameraRef);
+    //console.log('Scanning barcode...');
+    //console.log('Camera Ref:', cameraRef);
     setScanned(true);
     setModalVisible(false);
     await updateCoffeeCount(data);  
@@ -202,7 +188,7 @@ export const HomeScreen = ({navigation}) => {
       <StatusBar style="light" />
 
         <View style={styles.toolbar}>
-          <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
+          <Text style={styles.toolbarTitle}>Good morning, User</Text>
             <TouchableOpacity onPress={handleLogout}>
               <MaterialIcons name="logout" size={32} color="#000" style={{paddingRight: 10}} />
             </TouchableOpacity>
