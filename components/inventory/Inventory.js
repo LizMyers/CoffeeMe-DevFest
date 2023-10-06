@@ -11,7 +11,7 @@ export const Inventory = ({ data, imageLookup }) => {
         style={{ height: 50, width: 50}} 
         />
           <View style={styles.nameGroup}>
-            {item.name === 'Pumpkin Spice Cake' || item.name === 'Cioccolatino' ? 
+            {item.name === 'Pumpkin Spice Cake' || item.name === 'Cioccolato' ? 
              <Text style={[styles.name, {marginTop: 20, fontWeight: 'normal'}]}>{item.name}</Text>
              :
              <Text style={styles.name}>{item.name}</Text> 

@@ -118,7 +118,7 @@ export const HomeScreen = ({navigation}) => {
     setScanned(true);
     setModalVisible(false);
     await updateCoffeeCount(data);  
-    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {
@@ -188,7 +188,7 @@ export const HomeScreen = ({navigation}) => {
       <StatusBar style="light" />
 
         <View style={styles.toolbar}>
-          <Text style={styles.toolbarTitle}>Good morning, User</Text>
+          <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
             <TouchableOpacity onPress={handleLogout}>
               <MaterialIcons name="logout" size={32} color="#000" style={{paddingRight: 10}} />
             </TouchableOpacity>

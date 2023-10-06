@@ -1,7 +1,7 @@
 // imageLookup.js
 const imageLookup = {
     arpeggio: require('../assets/capsules/arpeggio.png'),
-    cioccolatino: require('../assets/capsules/cioccolatino.png'),
+    cioccolato: require('../assets/capsules/cioccolato.png'),
     india: require('../assets/capsules/india.png'),
     miami: require('../assets/capsules/miami.png'),
     napoli: require('../assets/capsules/napoli.png'),
