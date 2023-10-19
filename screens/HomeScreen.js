@@ -188,7 +188,7 @@ export const HomeScreen = ({navigation}) => {
       <StatusBar style="light" />
 
         <View style={styles.toolbar}>
-          <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
+          <Text style={styles.toolbarTitle}>Good morning, User</Text>
             <TouchableOpacity onPress={handleLogout}>
               <MaterialIcons name="logout" size={32} color={Colors.white} style={{paddingRight: 10}} />
             </TouchableOpacity>
