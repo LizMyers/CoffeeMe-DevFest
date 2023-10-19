@@ -12,7 +12,7 @@ export const Logo = ({ uri }) => {
 // animated coffee cup
 // return  (
 //   <View style={styles.container}>
-//     <LottieView style={styles.coffeeLogo} source={require('../assets/coffee_anim.json')} autoPlay loop  />
+//     <LottieView style={styles.coffeeLogo} source={require('../assets/greenCoffeeAnim.json')} autoPlay loop  />
 //   </View>
 //   )
 };

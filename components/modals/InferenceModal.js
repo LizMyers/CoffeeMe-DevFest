@@ -168,7 +168,7 @@ const processPredictions = (predictions, coffeeDataArray) => {
     >
       <View style={{ position: 'absolute', top: 0, width: '100%', padding: 16 }}>
         {/* ../../assets/loading.json == Googley dots dancing */}
-        {loading && <LottieView source={require('../../assets/coffee_anim.json')} autoPlay loop 
+        {loading && <LottieView source={require('../../assets/greenCoffeeAnim.json')} autoPlay loop 
           style={{
             position: 'absolute',
             top: 30, 
