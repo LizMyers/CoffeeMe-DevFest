@@ -41,6 +41,8 @@ const processPredictions = (predictions, coffeeDataArray) => {
   const coffeeData = convertCoffeeArrayToObject(coffeeDataArray);
 
   const topPrediction = predictions[0];
+  if (topPrediction.class === 'cioccolatino') {topPrediction.class = 'cioccolato'}
+  console.log('Debug - topPrediction:', topPrediction.class);
   const actualName = getActualName(topPrediction.class, coffeeData);
 
   // Triggering the subtract function
@@ -158,7 +160,7 @@ const processPredictions = (predictions, coffeeDataArray) => {
       />
 
     <View 
-      style={{flex: 1, backgroundColor: Colors.cream,}} 
+      style={{flex: 1, backgroundColor: Colors.lightblue,}} 
       onLayout={(event) => {
         const { width } = event.nativeEvent.layout;
         setContainerWidth(width);
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.coffee,
+    backgroundColor: Colors.green,
     padding: 10,
     borderRadius: 8
   },
@@ -238,7 +240,7 @@ const styles = StyleSheet.create({
      alignItems: 'center', 
      justifyContent: 'center',
      borderWidth: 0,
-     borderColor: Colors.coffee,
+     borderColor: Colors.black,
   },
   predictionText: {
     display: 'block',
@@ -248,7 +250,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: '#000000',
-    borderColor: Colors.coffee,
+    borderColor: Colors.black,
     borderWidth: 0,
+    textTransform: 'capitalize',
   }
 });

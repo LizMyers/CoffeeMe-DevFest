@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: .25,
         borderStyle: 'solid',
-        borderBottomColor: Colors.caramel,
+        borderBottomColor: Colors.green,
         marginLeft: 4,
       },
       thumbnail: {
@@ -59,12 +59,13 @@ const styles = StyleSheet.create({
         flex: 1, 
         marginLeft: 10,
         fontSize: 20,
-        color: '#4f2200'
+        fontWeight: 800,
+        color: Colors.black
       },
       strength: {
         width: 170,
         maxHeight: 10,
-        opacity: .4,
+        opacity: .25,
         position: 'absolute',
         top: 30,
         left: 10,

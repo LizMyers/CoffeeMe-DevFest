@@ -17,13 +17,16 @@ export const BarcodeModal = ({ setModalVisible, handleBarCodeScanned }) => {
       <View 
       style={{
         flex: 1, 
-        backgroundColor: Colors.cream,
+        backgroundColor: Colors.lightblue,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
 
-        <Text style={{ width: '80%', marginTop: -40, fontSize: 20, textAlign: 'center', color: Colors.coffee, fontWeight: '700' }}>
-          URL to BarCodes online
+        <Text style={{ width: '80%', marginTop: -40, fontSize: 16, textAlign: 'center', color: Colors.black, fontWeight: '700' }}>
+          Scan barcodes at:
+        </Text>
+        <Text style={{ width: '80%', marginTop: 10, fontSize: 20, textAlign: 'center', color: Colors.black, fontWeight: '700' }}>
+          devfest.sanddollarapps.com
         </Text>
 
       </View>

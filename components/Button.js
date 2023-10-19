@@ -34,6 +34,6 @@ export const Button = ({
 const styles = StyleSheet.create({
   borderlessButtonText: {
     fontSize: 16,
-    color: Colors.coffee
+    color: Colors.black
   }
 });

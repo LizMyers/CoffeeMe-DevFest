@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet, Button, Text, FlatList, TouchableOpacity, Image} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Colors } from '../config';
 
 import { HomeScreen } from '../screens';
 
@@ -14,10 +15,10 @@ export const AppStack = () => {
       component={HomeScreen}
       options={{
         headerStyle: {
-          backgroundColor: '#6B4423',
+          backgroundColor: Colors.black,
       },
       headerTitleStyle: {
-        color: '#F5E7D9',
+        color: Colors.white,
     }}
   }
       />

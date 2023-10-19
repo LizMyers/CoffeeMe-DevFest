@@ -20,7 +20,8 @@ export const Logo = ({ uri }) => {
 const styles = StyleSheet.create({
   image: {
     width: 250,
-    height: 390
+    height: 250,
+    marginTop: 20
   },
   container: {
     flex: 1,

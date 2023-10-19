@@ -23,14 +23,14 @@ export const TextInput = ({
         marginVertical: 12,
         width,
         borderWidth: 1,
-        borderColor: Colors.caramel
+        borderColor: Colors.black
       }}
     >
       {leftIconName ? (
         <Icon
           name={leftIconName}
           size={22}
-          color={Colors.caramel}
+          color={Colors.black}
           style={{ marginRight: 10 }}
         />
       ) : null}
@@ -39,9 +39,9 @@ export const TextInput = ({
           flex: 1,
           width: '100%',
           fontSize: 18,
-          color: Colors.coffee
+          color: Colors.black
         }}
-        placeholderTextColor={Colors.caramel}
+        placeholderTextColor={Colors.black}
         {...otherProps}
       />
       {rightIcon ? (
@@ -49,7 +49,7 @@ export const TextInput = ({
           <Icon
             name={rightIcon}
             size={22}
-            color={Colors.caramel}
+            color={Colors.black}
             style={{ marginRight: 10 }}
           />
         </Button>

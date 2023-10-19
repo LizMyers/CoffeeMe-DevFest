@@ -27,7 +27,7 @@ export const LoginScreen = ({ navigation }) => {
         <StatusBar style="dark" />
         <KeyboardAwareScrollView enableOnAndroid={true}>
           {/* LogoContainer: consists app logo and screen title */}
-          <View style={[styles.logoContainer, {height: 400, borderWidth: 0, borderColor: Colors.coffee}]}>
+          <View style={[styles.logoContainer, {height: 300, borderWidth: 0, borderColor: Colors.black}]}>
             <Logo uri={Images.logo} />
             {/* <Text style={styles.screenTitle}>Welcome back!</Text> */}
           </View>
@@ -119,12 +119,12 @@ export const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.cream,
+    backgroundColor: Colors.lightblue,
     paddingHorizontal: 12
   },
   logoContainer: {
     alignItems: 'center',
-    height: 320,
+    // height: 320,
   },
   screenTitle: {
     fontSize: 32,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   footer: {
-    backgroundColor: Colors.cream,
+    backgroundColor: Colors.lightblue,
     paddingHorizontal: 12,
     paddingBottom: 48,
     alignItems: 'center'
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.caramel,
+    backgroundColor: Colors.green,
     padding: 10,
     borderRadius: 8
   },

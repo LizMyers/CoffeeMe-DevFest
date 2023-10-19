@@ -86,7 +86,7 @@ export const HomeScreen = ({navigation}) => {
           <Feather
             name="coffee"
             size={32}
-            color="#F5E7D9"
+            color={Colors.white}
             onPress={() => {
               setIsCameraMode(true);
               setModalVisible(true);
@@ -99,7 +99,7 @@ export const HomeScreen = ({navigation}) => {
           <Ionicons
             name="barcode-sharp"
             size={32}
-            color="#F5E7D9"
+            color={Colors.white}
             onPress={() => {
               setIsCameraMode(false);
               setModalVisible(true);
@@ -118,7 +118,7 @@ export const HomeScreen = ({navigation}) => {
     setScanned(true);
     setModalVisible(false);
     await updateCoffeeCount(data);  
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   if (hasPermission === null) {
@@ -190,7 +190,7 @@ export const HomeScreen = ({navigation}) => {
         <View style={styles.toolbar}>
           <Text style={styles.toolbarTitle}>Good morning, Liz</Text>
             <TouchableOpacity onPress={handleLogout}>
-              <MaterialIcons name="logout" size={32} color="#000" style={{paddingRight: 10}} />
+              <MaterialIcons name="logout" size={32} color={Colors.white} style={{paddingRight: 10}} />
             </TouchableOpacity>
         </View>
 
@@ -223,7 +223,7 @@ export const HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   toolbar: {
-    backgroundColor: '#F5E7D9',
+    backgroundColor: Colors.green,
     paddingVertical: 10,
     flexDirection: 'row',
     paddingLeft: 10,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     maxHeight: 60,
   },
   toolbarTitle: {
-    color: '#4f2200',
+    color: '#fff',
     textAlign: 'left',
     marginHorizontal: 10,
     lineHeight: 30,
@@ -241,13 +241,13 @@ const styles = StyleSheet.create({
     modal: {
       flex: 1,
       paddingTop: 50,
-      backgroundColor: Colors.coffee,
+      backgroundColor: Colors.black,
     },
     button: {
       width: '90%',
       marginTop: 20,
       alignSelf: 'center',
-      backgroundColor: Colors.caramel,
+      backgroundColor: Colors.white,
       color: Colors.white,
       padding: 15,
       borderRadius: 8

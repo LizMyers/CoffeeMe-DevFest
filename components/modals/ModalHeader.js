@@ -8,7 +8,7 @@ const ModalHeader = ({ title, setModalVisible }) => {
     <View style={styles.modalHeader}>
       <Text style={styles.modalHeaderTitle}>{title}</Text>
       <TouchableOpacity onPress={() => setModalVisible(false)}>
-        <Ionicons name="close" size={32} color="#F5E7D9" />
+        <Ionicons name="close" size={32} color={Colors.white} />
       </TouchableOpacity>
     </View>
   );
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     modalHeader: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor: Colors.coffee,
+      backgroundColor: Colors.black,
       padding: 16,
       width: '100%',
       alignItems: 'center',
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       textAlign: 'center',
       marginLeft: 30,
-      color: '#F5E7D9',
+      color: Colors.white,
       fontSize: 19,
     },
   });

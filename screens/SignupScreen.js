@@ -132,7 +132,7 @@ export const SignupScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.cream,
+    backgroundColor: Colors.lightblue,
     paddingHorizontal: 12
   },
   logoContainer: {
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.caramel,
+    backgroundColor: Colors.green,
     padding: 10,
     borderRadius: 8
   },

@@ -66,9 +66,10 @@ export const ForgotPasswordScreen = ({ navigation }) => {
       </Formik>
       {/* Button to navigate to Login screen */}
       <Button
-        style={styles.borderlessButtonContainer}
+        style={[styles.borderlessButtonContainer, {color: '#000'}]}
         borderless
         title={'Go back to Login'}
+        color='#000'
         onPress={() => navigation.navigate('Login')}
       />
     </View>
@@ -78,7 +79,7 @@ export const ForgotPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.cream,
+    backgroundColor: Colors.lightblue,
     paddingHorizontal: 12
   },
   innercontainer: {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   screenTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: Colors.coffee,
+    color: Colors.black,
     paddingTop: 40,
     textAlign: 'center'
   },
@@ -102,9 +103,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
-    backgroundColor: Colors.caramel,
+    backgroundColor: Colors.green,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
+    color: '#000000'
   },
   buttonText: {
     fontSize: 20,
@@ -114,6 +116,7 @@ const styles = StyleSheet.create({
   borderlessButtonContainer: {
     marginTop: 16,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    color: '#000000'
   }
 });
