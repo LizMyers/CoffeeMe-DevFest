@@ -58,7 +58,7 @@ const processPredictions = (predictions, coffeeDataArray) => {
         method: 'POST',
         url: 'https://detect.roboflow.com/nespresso_capsules/2',
         params: {
-          api_key: '3wQRrZxbeul5IzxT9DEj',
+          api_key: 'XXXXXX',
         },
         data: base64Image,
         headers: {
