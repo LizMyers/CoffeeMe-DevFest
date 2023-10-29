@@ -1,3 +1,9 @@
+# The Coffee-Me App Quickstart
+
+Welcome! The quickstart app was begun with the expo-firebase-starter kit by the community. The template gives you a quick React-Firebase project but is based upon Expo SDK 46. The Main branch of the project has been updated to run v 49. All you need to do is edit the environment variables as decribed below in the starter kit directions.
+
+-----------------------------
+
 # expo-firebase-starter 🔥
 
 ![Supports Expo iOS](https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff)
