@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
      borderColor: Colors.black,
   },
   predictionText: {
-    display: 'block',
     width: '100%',
     textAlign: 'center',
     lineHeight: 40,
