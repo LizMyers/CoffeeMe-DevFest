@@ -25,6 +25,7 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
 
+
 // Get references to the Firestore, Storage, and Functions services
 const db = getFirestore(app);
 const storage = getStorage(app);

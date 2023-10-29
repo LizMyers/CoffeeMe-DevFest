@@ -11,6 +11,8 @@ import axios from 'axios';
 import { db } from '../../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
+import expoConfig from 'expo-constants';
+const { roboflowApiKey } = expoConfig;
 
 export const InferenceModal = ({ setModalVisible, cameraRef, coffeeData, takePicture }) => {
   
@@ -19,6 +21,7 @@ export const InferenceModal = ({ setModalVisible, cameraRef, coffeeData, takePic
   const [displayText, setDisplayText] = useState('');
 
   const [loading, setLoading] = useState(false);
+
 
   // Function to map class name to the actual name in Firebase
   const getActualName = (className, coffeeData) => {
@@ -51,8 +54,9 @@ const processPredictions = (predictions, coffeeDataArray) => {
 
 
   const getInference = async (base64Image) => {
+    console.log('roboflowApiKey...', roboflowApiKey);
     setLoading(true);
-
+    
     try {
       const response = await axios({
         method: 'POST',
