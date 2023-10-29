@@ -36,9 +36,9 @@ export default {
       expo: {
         expoProjectId: process.env.EXPO_PROJECT_ID,
       }
-      
-    },
+      },
     
     }
+    
   }
 

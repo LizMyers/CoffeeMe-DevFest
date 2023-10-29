@@ -11,8 +11,10 @@ import axios from 'axios';
 import { db } from '../../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
-import expoConfig from 'expo-constants';
-const { roboflowApiKey } = expoConfig;
+import Constants from 'expo-constants';
+
+const { roboflowApiKey } = Constants.expoConfig.extra;
+
 
 export const InferenceModal = ({ setModalVisible, cameraRef, coffeeData, takePicture }) => {
   
@@ -54,7 +56,7 @@ const processPredictions = (predictions, coffeeDataArray) => {
 
 
   const getInference = async (base64Image) => {
-    console.log('roboflowApiKey...', roboflowApiKey);
+
     setLoading(true);
     
     try {
@@ -62,7 +64,7 @@ const processPredictions = (predictions, coffeeDataArray) => {
         method: 'POST',
         url: 'https://detect.roboflow.com/nespresso_capsules/2',
         params: {
-          api_key: 'XXXXXX',
+          api_key: roboflowApiKey,
         },
         data: base64Image,
         headers: {
