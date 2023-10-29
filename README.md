@@ -1,6 +1,6 @@
 # The Coffee-Me App Quickstart
 
-Welcome! The quickstart app was begun with the expo-firebase-starter kit by <a href="https://twitter.com/amanhimself" target="_blank">@amanhimself</a>.  The Main branch of the project has been updated to run the latest Expo version 49. All you need to do is edit the environment variables as decribed below in the starter kit directions.
+Welcome! The Coffee-Me app was begun with the expo-firebase-starter kit by <a href="https://twitter.com/amanhimself" target="_blank">@amanhimself</a>.  The Main branch of the project has been updated to run the latest Expo version 49. All you need to do is edit the environment variables as decribed below in the starter kit directions.
 
 -----------------------------
 
