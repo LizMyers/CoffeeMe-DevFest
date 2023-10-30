@@ -18,10 +18,7 @@ export default {
       fallbackToCacheTimeout: 0
     },
     assetBundlePatterns: ['**/*'],
-    ios: {
-      supportsTablet: true,
-      bundleIdentifier: 'com.sanddollarapps.coffeeme',
-    },
+
     extra: {
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
@@ -30,12 +27,6 @@ export default {
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
       roboflowApiKey: process.env.ROBOFLOW_API_KEY,
-      eas: {
-        projectId: process.env.EAS_PROJECT_ID,
-      },
-      expo: {
-        expoProjectId: process.env.EXPO_PROJECT_ID,
-      }
       },
     
     }
